@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ecommerce
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: ecommerce
+data:
+  DEBUG: "False"
+  ALLOWED_HOSTS: "localhost,127.0.0.1,backend"
+  DJANGO_SETTINGS_MODULE: "ecommerce.settings"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-credentials
+  namespace: ecommerce
+type: Opaque
+stringData:
+  DB_USER: postgres
+  DB_PASSWORD: postgres123
+  DB_NAME: ecommerce_db
+  DB_HOST: postgres
+  DB_PORT: "5432"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: django-secret
+  namespace: ecommerce
+type: Opaque
+stringData:
+  SECRET_KEY: "django-insecure-change-this-in-production-environment"

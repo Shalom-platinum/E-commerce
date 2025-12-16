@@ -1,0 +1,191 @@
+replicaCount: 2
+
+image:
+  registry: docker.io
+  repository: your-registry/ecommerce
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+# Backend Configuration
+backend:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: your-registry/ecommerce-backend
+    tag: latest
+  port: 8000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  env:
+    DEBUG: "False"
+    ALLOWED_HOSTS: "localhost,127.0.0.1,backend,*.example.com"
+    CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://frontend:3000"
+  database:
+    engine: postgresql
+    host: postgres
+    port: 5432
+    name: ecommerce_db
+    user: postgres
+  redis:
+    host: redis
+    port: 6379
+  mlService:
+    url: "http://ml-recommender:8001"
+
+# Frontend Configuration
+frontend:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: your-registry/ecommerce-frontend
+    tag: latest
+  port: 3000
+  resources:
+    limits:
+      cpu: 256m
+      memory: 256Mi
+    requests:
+      cpu: 128m
+      memory: 128Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 80
+  env:
+    REACT_APP_API_URL: "http://backend:8000/api"
+    REACT_APP_ML_URL: "http://ml-recommender:8001"
+
+# ML Recommender Configuration
+mlRecommender:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: your-registry/ecommerce-ml
+    tag: latest
+  port: 8001
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+
+# PostgreSQL Configuration
+postgresql:
+  enabled: true
+  auth:
+    username: postgres
+    password: postgres123
+    database: ecommerce_db
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+# Redis Configuration
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 2Gi
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: "ecommerce.local"
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: backend
+          port: 8000
+        - path: /
+          pathType: Prefix
+          service: frontend
+          port: 3000
+  tls:
+    - secretName: ecommerce-tls
+      hosts:
+        - "ecommerce.local"
+
+# Service Configuration
+service:
+  type: ClusterIP
+  backend:
+    port: 8000
+    targetPort: 8000
+  frontend:
+    port: 3000
+    targetPort: 3000
+  mlRecommender:
+    port: 8001
+    targetPort: 8001
+
+# Namespace
+namespace: default
+
+# Labels
+labels:
+  app.kubernetes.io/name: ecommerce
+  app.kubernetes.io/version: "1.0"

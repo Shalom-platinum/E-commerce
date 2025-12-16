@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ecommerce.fullname" . }}-backend
+  labels:
+    {{- include "ecommerce.labels" . | nindent 4 }}
+    component: backend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.backend.port }}
+      targetPort: {{ .Values.service.backend.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "ecommerce.selectorLabels" . | nindent 4 }}
+    component: backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ecommerce.fullname" . }}-frontend
+  labels:
+    {{- include "ecommerce.labels" . | nindent 4 }}
+    component: frontend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.frontend.port }}
+      targetPort: {{ .Values.service.frontend.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "ecommerce.selectorLabels" . | nindent 4 }}
+    component: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ecommerce.fullname" . }}-ml
+  labels:
+    {{- include "ecommerce.labels" . | nindent 4 }}
+    component: ml-recommender
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.mlRecommender.port }}
+      targetPort: {{ .Values.service.mlRecommender.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "ecommerce.selectorLabels" . | nindent 4 }}
+    component: ml-recommender

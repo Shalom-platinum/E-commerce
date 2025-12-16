@@ -1,0 +1,14 @@
+apiVersion: v2
+name: ecommerce
+description: A Helm chart for E-commerce application with backend, frontend, and ML services
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - ecommerce
+  - django
+  - react
+  - ml
+maintainers:
+  - name: DevOps Team
+    email: devops@ecommerce.local
