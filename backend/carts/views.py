@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer
+from products.models import ProductInteraction
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -32,6 +36,20 @@ class CartViewSet(viewsets.ModelViewSet):
             if not created:
                 item.quantity += quantity
                 item.save()
+            
+            # Track add-to-cart interaction
+            try:
+                session_id = request.session.session_key
+                ProductInteraction.objects.create(
+                    user=request.user,
+                    product_id=product_id,
+                    interaction_type='add_to_cart',
+                    session_id=session_id
+                )
+                logger.info(f"Tracked add_to_cart for user {request.user.id}, product {product_id}")
+            except Exception as e:
+                logger.error(f"Failed to track add_to_cart interaction: {e}")
+            
             return Response(CartItemSerializer(item).data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

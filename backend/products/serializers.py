@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, ProductReview
+from .models import Product, Category, ProductReview, ProductInteraction
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -14,6 +14,18 @@ class ProductReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReview
         fields = ['id', 'user', 'rating', 'title', 'comment', 'created_at']
+
+
+class ProductInteractionSerializer(serializers.ModelSerializer):
+    user_username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = ProductInteraction
+        fields = [
+            'id', 'user', 'user_username', 'product', 'interaction_type',
+            'rating', 'session_id', 'time_spent_seconds', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
 
 
 class ProductSerializer(serializers.ModelSerializer):

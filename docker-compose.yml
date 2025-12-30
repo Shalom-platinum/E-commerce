@@ -78,6 +78,13 @@ services:
       - "8001:8001"
     environment:
       PORT: "8001"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_DB: "1"
+      BACKEND_URL: "http://backend:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
     volumes:
       - ./ml-recommender:/app
     healthcheck:
