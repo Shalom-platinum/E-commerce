@@ -59,6 +59,8 @@ yarn-error.log
 // Build outputs
 /frontend/build
 /backend/static_root
+/backend/media/
+/backend/staticfiles/
 
 // Kubernetes
 kubeconfig

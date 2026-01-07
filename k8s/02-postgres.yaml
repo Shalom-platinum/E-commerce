@@ -48,22 +48,33 @@ spec:
             limits:
               cpu: 1000m
               memory: 1Gi
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/sh
+          #       - -c
+          #       - pg_isready -U postgres
+          #   initialDelaySeconds: 20
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/sh
+          #       - -c
+          #       - pg_isready -U postgres
+          #   initialDelaySeconds: 20
+          #   periodSeconds: 10
           livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - pg_isready -U postgres
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+
           readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - pg_isready -U postgres
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
   volumeClaimTemplates:
     - metadata:
         name: postgres-storage

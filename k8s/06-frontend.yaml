@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: your-registry/ecommerce-frontend:latest
-          imagePullPolicy: Always
+          image: e-commerce-frontend:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 3000
               name: http

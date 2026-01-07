@@ -11,7 +11,7 @@ from .serializers import ProductSerializer, CategorySerializer, ProductListSeria
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    print('CategoryViewSet initialized  ')
+    #print('CategoryViewSet initialized  ')
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 

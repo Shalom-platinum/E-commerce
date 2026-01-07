@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'carts',
     'user_accounts',
     'orders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -64,8 +65,8 @@ if config('USE_POSTGRESQL', default=False, cast=bool):
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': config('DB_NAME', default='ecommerce_db'),
             'USER': config('DB_USER', default='postgres'),
-            'PASSWORD': config('DB_PASSWORD', default='postgres'),
-            'HOST': config('DB_HOST', default='localhost'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres123'),
+            'HOST': config('DB_HOST', default='postgres'),#localhost
             'PORT': config('DB_PORT', default='5432'),
         }
     }

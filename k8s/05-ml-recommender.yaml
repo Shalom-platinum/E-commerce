@@ -17,14 +17,22 @@ spec:
     spec:
       containers:
         - name: ml-recommender
-          image: your-registry/ecommerce-ml:latest
-          imagePullPolicy: Always
+          image: e-commerce-ml-recommender:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8001
               name: http
           env:
             - name: PORT
               value: "8001"
+            - name: REDIS_HOST
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379" 
+            - name: REDIS_DB
+              value: "1"
+            - name: BACKEND_URL
+              value: "http://backend:8000"
           resources:
             requests:
               cpu: 500m

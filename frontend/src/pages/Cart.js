@@ -31,7 +31,7 @@ export default function Cart({ setCartItems }) {
       setCartItems(response.data.items?.length || 0);
       setError(null);
     } catch (err) {
-      setError('Failed to load cart');
+      setError('Failed to load cart, Please try to Sign In/Up if you haven\'t already.');
       console.error(err);
     } finally {
       setLoading(false);

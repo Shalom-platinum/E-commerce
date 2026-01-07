@@ -42,13 +42,13 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /admin/
+              path: /api/products/
               port: http
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /admin/
+              path: /api/products/
               port: http
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -59,6 +59,8 @@ spec:
               value: "{{ .Values.backend.env.DEBUG }}"
             - name: ALLOWED_HOSTS
               value: "{{ .Values.backend.env.ALLOWED_HOSTS }}"
+            - name: USE_POSTGRESQL
+              value: "{{ .Values.backend.env.USE_POSTGRESQL }}"
             - name: CORS_ALLOWED_ORIGINS
               value: "{{ .Values.backend.env.CORS_ALLOWED_ORIGINS }}"
             - name: DB_ENGINE
