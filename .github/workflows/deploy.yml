@@ -28,11 +28,10 @@ jobs:
         
     - name: Log in to ACR
       run: |
-        az acr login --name ecommerce007
-        
-    - name: Verify ACR login
-      run: |
-        docker info | grep -i registry
+        CREDENTIALS='${{ secrets.AZURE_CREDENTIALS }}'
+        CLIENT_ID=$(echo $CREDENTIALS | jq -r '.clientId')
+        CLIENT_SECRET=$(echo $CREDENTIALS | jq -r '.clientSecret')
+        docker login ${{ env.REGISTRY }} -u $CLIENT_ID -p $CLIENT_SECRET
       continue-on-error: true
         
     - name: Build and push backend image
