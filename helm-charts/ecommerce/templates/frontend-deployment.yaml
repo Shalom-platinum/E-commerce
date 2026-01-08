@@ -15,7 +15,7 @@ spec:
       component: frontend
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.ingress.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

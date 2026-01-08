@@ -4,9 +4,10 @@ image:
   registry: docker.io
   repository: ecommerce007.azurecr.io
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: acr-secret
 nameOverride: ""
 fullnameOverride: ""
 
@@ -53,14 +54,14 @@ backend:
     DEBUG: "True"
     ALLOWED_HOSTS: "*"
     USE_POSTGRESQL: "True"
-    CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://frontend:3000"
+    CORS_ALLOWED_ORIGINS: "http://ecommerce.local,http://localhost:3000,http://frontend:3000"
   database:
     # External Azure PostgreSQL parameters
-    host: "" # e.g., your-server.postgres.database.azure.com
+    host: "ecommerce007.postgres.database.azure.com" # e.g., your-server.postgres.database.azure.com
     port: 5432
-    name: "ecommerce_db"
-    user: "" # e.g., admin@your-server
-    password: "" # Store securely
+    name: "ecommerce007"
+    user: "shalom" # e.g., admin@your-server
+    password: "Password1." # Store securely
   redis:
     host: redis
     port: 6379
@@ -88,8 +89,8 @@ frontend:
     maxReplicas: 4
     targetCPUUtilizationPercentage: 80
   env:
-    REACT_APP_API_URL: "http://backend:8000/api"
-    REACT_APP_ML_URL: "http://ml-recommender:8001"
+    REACT_APP_API_URL: ""
+    REACT_APP_ML_URL: "http://ecommerce-ml:8001"
 
 # ML Recommender Configuration
 mlRecommender:
@@ -140,12 +141,14 @@ redis:
 ingress:
   enabled: true
   className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  annotations: {}
   hosts:
     - host: "ecommerce.local"
       paths:
+        - path: /api/ml
+          pathType: Prefix
+          service: ml
+          port: 8001
         - path: /api
           pathType: Prefix
           service: backend
@@ -158,8 +161,16 @@ ingress:
           pathType: Prefix
           service: backend
           port: 8000
+        - path: /static
+          pathType: Prefix
+          service: backend
+          port: 8000  
+        - path: /media
+          pathType: Prefix
+          service: backend
+          port: 8000  
   tls:
-    - secretName: ecommerce-tls
+    - secretName: ecommerce-tls-selfsigned
       hosts:
         - "ecommerce.local"
 

@@ -136,14 +136,14 @@ def health():
     }), 200
 
 
-@app.route('/api/model/info', methods=['GET'])
+@app.route('/api/ml/model/info', methods=['GET'])
 def model_info():
     """Get current model information"""
     info = recommender.get_model_info()
     return jsonify(info), 200
 
 
-@app.route('/api/recommendations/product/<int:product_id>', methods=['GET'])
+@app.route('/api/ml/recommendations/product/<int:product_id>', methods=['GET'])
 def get_product_recommendations(product_id):
     """Get recommendations based on product similarity with caching"""
     try:
@@ -194,7 +194,7 @@ def get_product_recommendations(product_id):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/recommendations/user/<int:user_id>', methods=['GET'])
+@app.route('/api/ml/recommendations/user/<int:user_id>', methods=['GET'])
 def get_user_recommendations(user_id):
     """Get personalized recommendations for a user with caching"""
     try:
@@ -232,7 +232,7 @@ def get_user_recommendations(user_id):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/recommendations/popular', methods=['GET'])
+@app.route('/api/ml/recommendations/popular', methods=['GET'])
 def get_popular_products():
     """Get highest-rated products with caching"""
     try:
@@ -271,7 +271,7 @@ def get_popular_products():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/cache/clear', methods=['POST'])
+@app.route('/api/ml/cache/clear', methods=['POST'])
 def clear_cache():
     """Clear all recommendation caches (admin endpoint)"""
     try:
@@ -285,7 +285,7 @@ def clear_cache():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/cache/stats', methods=['GET'])
+@app.route('/api/ml/cache/stats', methods=['GET'])
 def cache_stats():
     """Get cache statistics"""
     if not REDIS_AVAILABLE or redis_client is None:
@@ -309,7 +309,7 @@ def cache_stats():
         }), 200
 
 
-@app.route('/api/retrain', methods=['POST'])
+@app.route('/api/ml/retrain', methods=['POST'])
 def retrain_model():
     """
     Manually trigger model retraining with data from backend database.

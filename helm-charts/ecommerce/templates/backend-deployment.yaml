@@ -36,6 +36,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn ecommerce.wsgi:application --bind 0.0.0.0:8000" ]
           ports:
             - name: http
               containerPort: {{ .Values.backend.port }}

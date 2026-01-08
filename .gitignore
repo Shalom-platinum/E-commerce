@@ -58,6 +58,7 @@ yarn-error.log
 
 // Build outputs
 /frontend/build
+/frontend/node_modules/
 /backend/static_root
 /backend/media/
 /backend/staticfiles/

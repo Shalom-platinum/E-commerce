@@ -404,7 +404,7 @@ Authorization: Token <token>
 
 ### Get Product Recommendations
 ```http
-GET /api/recommendations/product/{product_id}?n=5&gender=M&size=L
+GET /api/ml/recommendations/product/{product_id}?n=5&gender=M&size=L
 ```
 
 **Query Parameters**:
@@ -438,7 +438,7 @@ GET /api/recommendations/product/{product_id}?n=5&gender=M&size=L
 
 ### Get Personalized Recommendations
 ```http
-GET /api/recommendations/user/{user_id}?n=5
+GET /api/ml/recommendations/user/{user_id}?n=5
 ```
 
 **Query Parameters**:
@@ -463,7 +463,7 @@ GET /api/recommendations/user/{user_id}?n=5
 
 ### Get Popular Products
 ```http
-GET /api/recommendations/popular?n=5
+GET /api/ml/recommendations/popular?n=5
 ```
 
 **Response**:

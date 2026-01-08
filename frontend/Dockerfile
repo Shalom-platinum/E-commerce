@@ -9,7 +9,6 @@ RUN npm install
 COPY . .
 
 # Set environment variables for the build
-ENV REACT_APP_API_URL=http://localhost:8000/api
 ENV CI=false
 
 # Build and check for errors

@@ -125,13 +125,16 @@ export const userAPI = {
 
 export const recommendationAPI = {
   getProductRecommendations: (productId, n = 5) => 
-    axios.get(`${process.env.REACT_APP_ML_URL || 'http://localhost:8001'}/api/recommendations/product/${productId}?n=${n}`),
+    //axios.get(`${process.env.REACT_APP_ML_URL || 'http://localhost:8001'}/api/recommendations/product/${productId}?n=${n}`),
+    api.get(`/ml/recommendations/product/${productId}?n=${n}`),
   
   getUserRecommendations: (userId, n = 5) => 
-    axios.get(`${process.env.REACT_APP_ML_URL || 'http://localhost:8001'}/api/recommendations/user/${userId}?n=${n}`),
+    //axios.get(`${process.env.REACT_APP_ML_URL || 'http://localhost:8001'}/api/recommendations/user/${userId}?n=${n}`),
+    api.get(`/ml/recommendations/user/${userId}?n=${n}`),
   
   getPopularProducts: (n = 5) => 
-    axios.get(`${process.env.REACT_APP_ML_URL || 'http://localhost:8001'}/api/recommendations/popular?n=${n}`),
+    //axios.get(`${process.env.REACT_APP_ML_URL || 'http://localhost:8001'}/api/recommendations/popular?n=${n}`),
+    api.get(`/ml/recommendations/popular?n=${n}`),
 };
 
 // Admin APIs for payment management and analytics
