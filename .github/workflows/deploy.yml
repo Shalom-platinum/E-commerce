@@ -30,6 +30,10 @@ jobs:
       run: |
         az acr login --name ecommerce007
         
+    - name: Verify ACR login
+      run: |
+        docker info | grep -i registry
+        
     - name: Build and push backend image
       uses: docker/build-push-action@v5
       with:
