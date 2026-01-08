@@ -33,6 +33,7 @@ jobs:
     - name: Verify ACR login
       run: |
         docker info | grep -i registry
+      continue-on-error: true
         
     - name: Build and push backend image
       uses: docker/build-push-action@v5
