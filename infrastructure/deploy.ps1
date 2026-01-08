@@ -6,6 +6,7 @@ param(
     [string]$TemplateFile = "infrastructure/main.bicep"
 )
 
+#dd
 # Create resource group if it doesn't exist
 az group create --name $ResourceGroup --location $Location
 
